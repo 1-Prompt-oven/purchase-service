@@ -1,6 +1,7 @@
 package com.promptoven.purchaseservice.common.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -22,19 +23,14 @@ public class PurchaseProduct {
     @Column(nullable = false, length = 50)
     private String productUuid;
 
-    @Comment("상품 이름")
-    @Column(nullable = false, length = 50)
-    private String productName;
-
-    @Comment("상품 가격")
-    @Column(nullable = false)
-    private int price;
-
-    @Comment("프롬프트")
-    @Column(nullable = false)
-    private String prompt;
-
     @Comment("리뷰 작성 여부")
     @Column(nullable = false)
     private boolean writtenReview;
+
+    @Builder
+    public PurchaseProduct(String purchaseUuid, String productUuid, boolean writtenReview) {
+        this.purchaseUuid = purchaseUuid;
+        this.productUuid = productUuid;
+        this.writtenReview = writtenReview;
+    }
 }
