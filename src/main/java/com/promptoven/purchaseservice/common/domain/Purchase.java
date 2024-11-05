@@ -1,6 +1,7 @@
 package com.promptoven.purchaseservice.common.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -33,4 +34,12 @@ public class Purchase {
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private PurchaseStatus status;
+
+    @Builder
+    public Purchase(String purchaseUuid, String memberUuid, LocalDateTime purchasedAt, PurchaseStatus status) {
+        this.purchaseUuid = purchaseUuid;
+        this.memberUuid = memberUuid;
+        this.purchasedAt = purchasedAt;
+        this.status = status;
+    }
 }
