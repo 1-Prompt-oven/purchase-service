@@ -26,6 +26,10 @@ public class Purchase {
     @Column(nullable = false, length = 50)
     private String memberUuid;
 
+    @Comment("결제 ID")
+    @Column(nullable = false)
+    private Long paymentId;
+
     @Comment("주문 시간")
     @Column(nullable = false)
     private LocalDateTime purchasedAt;
@@ -36,9 +40,10 @@ public class Purchase {
     private PurchaseStatus status;
 
     @Builder
-    public Purchase(String purchaseUuid, String memberUuid, LocalDateTime purchasedAt, PurchaseStatus status) {
+    public Purchase(String purchaseUuid, String memberUuid, Long paymentId, LocalDateTime purchasedAt, PurchaseStatus status) {
         this.purchaseUuid = purchaseUuid;
         this.memberUuid = memberUuid;
+        this.paymentId = paymentId;
         this.purchasedAt = purchasedAt;
         this.status = status;
     }
