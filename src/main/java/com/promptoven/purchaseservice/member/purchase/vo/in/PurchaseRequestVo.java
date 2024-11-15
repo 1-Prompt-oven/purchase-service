@@ -14,9 +14,12 @@ public class PurchaseRequestVo {
 
     private List<String> productUuids;
 
+    private Long paymentId;
+
     @Builder
-    public PurchaseRequestVo(String memberUuid, List<String> productUuids) {
+    public PurchaseRequestVo(String memberUuid, List<String> productUuids, Long paymentId) {
         this.memberUuid = memberUuid;
         this.productUuids = productUuids;
+        this.paymentId = paymentId;
     }
 }

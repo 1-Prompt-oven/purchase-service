@@ -21,16 +21,20 @@ public class PurchaseRequestDto {
 
     private List<String> productUuids;
 
+    private Long paymentId;
+
     @Builder
-    public PurchaseRequestDto(String memberUuid, List<String> productUuids) {
+    public PurchaseRequestDto(String memberUuid, List<String> productUuids, Long paymentId) {
         this.memberUuid = memberUuid;
         this.productUuids = productUuids;
+        this.paymentId = paymentId;
     }
 
     public static PurchaseRequestDto toDto(PurchaseRequestVo vo) {
         return PurchaseRequestDto.builder()
                 .memberUuid(vo.getMemberUuid())
                 .productUuids(vo.getProductUuids())
+                .paymentId(vo.getPaymentId())
                 .build();
     }
 
@@ -38,6 +42,7 @@ public class PurchaseRequestDto {
         return Purchase.builder()
                 .purchaseUuid(UuidGenerator.generatePurchaseUuid())
                 .memberUuid(dto.getMemberUuid())
+                .paymentId(dto.getPaymentId())
                 .purchasedAt(LocalDateTime.now())
                 .status(PurchaseStatus.PENDING)
                 .build();
