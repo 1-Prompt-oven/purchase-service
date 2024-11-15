@@ -4,15 +4,16 @@ import com.promptoven.purchaseservice.global.common.response.BaseResponse;
 import com.promptoven.purchaseservice.member.purchase.application.PurchaseService;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseCartRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseRequestDto;
+import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseProductResponseDto;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseCartRequestVo;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseRequestVo;
+import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseProductResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +27,9 @@ public class PurchaseController {
     @Operation(summary = "상품 주문", description = "상품 주문")
     @PostMapping
     public BaseResponse<Void> purchaseProduct(@RequestBody PurchaseRequestVo requestVo) {
+
         purchaseService.createPurchase(PurchaseRequestDto.toDto(requestVo));
+
         return new BaseResponse<>();
     }
 
@@ -34,7 +37,22 @@ public class PurchaseController {
     @Operation(summary = "장바구니 상품 주문", description = "장바구니 상품 주문")
     @PostMapping("/cart")
     public BaseResponse<Void> purchaseCartProduct(@RequestBody PurchaseCartRequestVo requestVo) {
+
         purchaseService.createCartPurchase(PurchaseCartRequestDto.toDto(requestVo));
+
         return new BaseResponse<>();
+    }
+
+    @Operation(summary = "주문 상품 목록 조회", description = "주문 상품 목록 조회")
+    @GetMapping()
+    public BaseResponse<List<PurchaseProductResponseVo>> getPurchaseProduct(@RequestParam String memberUuid) {
+
+        List<PurchaseProductResponseDto> purchaseProductResponseDtos = purchaseService.getPurchaseProduct(memberUuid);
+
+        return new BaseResponse<>(
+                purchaseProductResponseDtos.stream()
+                        .map(PurchaseProductResponseDto::toVo)
+                        .toList()
+        );
     }
 }
