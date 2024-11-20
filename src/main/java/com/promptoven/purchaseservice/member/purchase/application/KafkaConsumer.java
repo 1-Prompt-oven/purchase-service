@@ -14,18 +14,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaConsumer {
 
-    private static final String CREATE_TOPIC = "create_payment_event";
+//    private static final String CREATE_TOPIC = "create_payment_event";
     private final PurchaseRepository purchaseRepository;
     private final PurchaseProductRepository purchaseProductRepository;
 
-    @KafkaListener(topics = CREATE_TOPIC, groupId = "kafka-payment-purchase-service")
+    @KafkaListener(topics = "${payment-create-event}", groupId = "kafka-payment-purchase-service")
     public void consumeCreate(RequestMessageDto message) {
 
         log.info("consumeCreate: {}", message);
 
         Purchase purchase = purchaseRepository.save(message.toPurchaseEntity(message.getMemberUuid(), message.getPaymentId()));
 
-        message.getProductUuid().forEach(purchaseProduct -> {
+        message.getProductUuids().forEach(purchaseProduct -> {
             purchaseProductRepository.save(RequestMessageDto.toPurchaseProductEntity(purchase.getPurchaseUuid(), purchaseProduct));
         });
     }
