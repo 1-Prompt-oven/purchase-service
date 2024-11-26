@@ -1,13 +1,16 @@
 package com.promptoven.purchaseservice.member.purchase.presentation;
 
+import com.promptoven.purchaseservice.global.common.CursorPage;
 import com.promptoven.purchaseservice.global.common.response.BaseResponse;
 import com.promptoven.purchaseservice.member.purchase.application.PurchaseService;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseCartRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseProductResponseDto;
+import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseResponseDto;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseCartRequestVo;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseRequestVo;
 import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseProductResponseVo;
+import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -43,16 +46,52 @@ public class PurchaseController {
         return new BaseResponse<>();
     }
 
-    @Operation(summary = "주문 상품 목록 조회", description = "주문 상품 목록 조회")
-    @GetMapping()
-    public BaseResponse<List<PurchaseProductResponseVo>> getPurchaseProduct(@RequestParam String memberUuid) {
+    @Operation(summary = "주문 목록 조회 (페이지네이션)", description = "주문 목록 조회 (페이지네이션)")
+    @GetMapping("/list")
+    public BaseResponse<CursorPage<PurchaseResponseVo>> getPurchaseList(
+            @RequestParam String memberUuid,
+            @RequestParam(required = false) Long lastPurchaseId,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
 
-        List<PurchaseProductResponseDto> purchaseProductResponseDtos = purchaseService.getPurchaseProduct(memberUuid);
+        CursorPage<PurchaseResponseDto> purchaseResponseDtos = purchaseService.getPurchaseList(memberUuid, lastPurchaseId, pageSize);
+
+        List<PurchaseResponseVo> purchaseResponseVos = purchaseResponseDtos.getContent().stream()
+                .map(PurchaseResponseDto::toVo)
+                .toList();
 
         return new BaseResponse<>(
-                purchaseProductResponseDtos.stream()
-                        .map(PurchaseProductResponseDto::toVo)
-                        .toList()
+                new CursorPage<>(
+                        purchaseResponseVos,
+                        purchaseResponseDtos.getNextCursor(),
+                        purchaseResponseDtos.getHasNext(),
+                        purchaseResponseDtos.getPageSize(),
+                        purchaseResponseVos.size()
+                )
         );
     }
+
+    @Operation(summary = "주문 상품 목록 조회 (페이지네이션)", description = "주문 상품 목록 조회 (페이지네이션)")
+    @GetMapping("/products")
+    public BaseResponse<CursorPage<PurchaseProductResponseVo>> getPurchaseProduct(
+            @RequestParam String memberUuid,
+            @RequestParam(required = false) Long lastProductId,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+
+        CursorPage<PurchaseProductResponseDto> purchaseProductResponseDtos = purchaseService.getPurchaseProduct(memberUuid, lastProductId, pageSize);
+
+        List<PurchaseProductResponseVo> purchaseProductResponseVos = purchaseProductResponseDtos.getContent().stream()
+                .map(PurchaseProductResponseDto::toVo)
+                .toList();
+
+        return new BaseResponse<>(
+                new CursorPage<>(
+                        purchaseProductResponseVos,
+                        purchaseProductResponseDtos.getNextCursor(),
+                        purchaseProductResponseDtos.getHasNext(),
+                        purchaseProductResponseDtos.getPageSize(),
+                        purchaseProductResponseVos.size()
+                )
+        );
+    }
+
 }
