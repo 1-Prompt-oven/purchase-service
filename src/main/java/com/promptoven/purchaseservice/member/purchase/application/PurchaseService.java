@@ -1,10 +1,10 @@
 package com.promptoven.purchaseservice.member.purchase.application;
 
+import com.promptoven.purchaseservice.global.common.CursorPage;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseCartRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseProductResponseDto;
-
-import java.util.List;
+import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseResponseDto;
 
 public interface PurchaseService {
 
@@ -12,5 +12,11 @@ public interface PurchaseService {
 
     void createCartPurchase(PurchaseCartRequestDto purchaseCartRequestDto);
 
-    List<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid);
+    //    List<PurchaseResponseDto> getPurchaseList(String memberUuid);
+    //
+    //    List<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid);
+
+    CursorPage<PurchaseResponseDto> getPurchaseList(String memberUuid, Long lastPurchaseId, Integer pageSize);
+
+    CursorPage<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid, Long lastProductId, Integer pageSize);
 }
