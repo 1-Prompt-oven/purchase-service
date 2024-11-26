@@ -2,6 +2,7 @@ package com.promptoven.purchaseservice.member.purchase.application;
 
 import com.promptoven.purchaseservice.common.domain.Purchase;
 import com.promptoven.purchaseservice.member.purchase.dto.in.RequestMessageDto;
+import com.promptoven.purchaseservice.member.purchase.dto.in.RequestReviewMessageDto;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseProductRepository;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaConsumer {
 
-//    private static final String CREATE_TOPIC = "create_payment_event";
+    //    private static final String CREATE_TOPIC = "create_payment_event";
     private final PurchaseRepository purchaseRepository;
     private final PurchaseProductRepository purchaseProductRepository;
 
@@ -26,7 +27,31 @@ public class KafkaConsumer {
         Purchase purchase = purchaseRepository.save(message.toPurchaseEntity(message.getMemberUuid(), message.getPaymentId()));
 
         message.getProductUuids().forEach(purchaseProduct -> {
-            purchaseProductRepository.save(RequestMessageDto.toPurchaseProductEntity(purchase.getPurchaseUuid(), purchaseProduct));
+            purchaseProductRepository.save(RequestMessageDto.toPurchaseProductEntity(purchase.getPurchaseUuid(), purchaseProduct, purchase.getMemberUuid()));
+        });
+    }
+
+    @KafkaListener(topics = "${review-create-event}", groupId = "kafka-create-review-service")
+    public void consumeReviewCreate(RequestReviewMessageDto message) {
+        purchaseProductRepository.findByMemberUuidAndProductUuid(
+                message.getAuthorUuid(), message.getProductUuid()
+        ).ifPresent(purchaseProduct -> {
+            if (!purchaseProduct.isWrittenReview()) {
+                purchaseProduct.setWrittenReview(true);
+                purchaseProductRepository.save(purchaseProduct);
+            }
+        });
+    }
+
+    @KafkaListener(topics = "${review-delete-event}", groupId = "kafka-delete-review-service")
+    public void consumeReviewDelete(RequestReviewMessageDto message) {
+        purchaseProductRepository.findByMemberUuidAndProductUuid(
+                message.getAuthorUuid(), message.getProductUuid()
+        ).ifPresent(purchaseProduct -> {
+            if (purchaseProduct.isWrittenReview()) {
+                purchaseProduct.setWrittenReview(false);
+                purchaseProductRepository.save(purchaseProduct);
+            }
         });
     }
 }
