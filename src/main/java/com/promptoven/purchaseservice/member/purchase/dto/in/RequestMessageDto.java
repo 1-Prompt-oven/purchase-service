@@ -32,10 +32,11 @@ public class RequestMessageDto {
                 .build();
     }
 
-    public static PurchaseProduct toPurchaseProductEntity(String purchaseUuid, String productUuid) {
+    public static PurchaseProduct toPurchaseProductEntity(String purchaseUuid, String productUuid, String memberUuid) {
         return PurchaseProduct.builder()
                 .purchaseUuid(purchaseUuid)
                 .productUuid(productUuid)
+                .memberUuid(memberUuid)
                 .writtenReview(false)
                 .build();
     }

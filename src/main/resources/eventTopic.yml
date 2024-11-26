@@ -1,2 +1,6 @@
 # Payment Service Produced
 payment-create-event: payment-create-event # {paymentId : String, memberUUID : String, productUUID : List<String>}
+
+review-create-event: review-create-event
+
+review-delete-event: review-delete-event

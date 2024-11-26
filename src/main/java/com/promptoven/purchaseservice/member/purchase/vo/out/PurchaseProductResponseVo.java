@@ -8,10 +8,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PurchaseProductResponseVo {
-    
+
+    private Long id;
+
     private String purchaseUuid;
 
     private String productUuid;
+
+    private String memberUuid;
 
     private boolean writtenReview;
 }
