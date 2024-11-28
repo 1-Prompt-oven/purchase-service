@@ -2,13 +2,11 @@ package com.promptoven.purchaseservice.member.purchase.dto.out;
 
 import com.promptoven.purchaseservice.common.domain.PurchaseProduct;
 import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseProductResponseVo;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
-@AllArgsConstructor
 public class PurchaseProductResponseDto {
 
     private Long id;

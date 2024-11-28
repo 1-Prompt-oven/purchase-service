@@ -7,14 +7,13 @@ import com.promptoven.purchaseservice.global.common.UuidGenerator;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseCartRequestVo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Builder
 @Getter
-@NoArgsConstructor
 public class PurchaseCartRequestDto {
 
     private String memberUuid;
@@ -22,13 +21,6 @@ public class PurchaseCartRequestDto {
     private List<String> productUuids;
 
     private List<Long> cartIds;
-
-    @Builder
-    public PurchaseCartRequestDto(String memberUuid, List<String> productUuids, List<Long> cartIds) {
-        this.memberUuid = memberUuid;
-        this.productUuids = productUuids;
-        this.cartIds = cartIds;
-    }
 
     public static PurchaseCartRequestDto toDto(PurchaseCartRequestVo vo) {
         return PurchaseCartRequestDto.builder()

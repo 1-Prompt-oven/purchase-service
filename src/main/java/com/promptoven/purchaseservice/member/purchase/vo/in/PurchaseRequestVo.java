@@ -2,24 +2,16 @@ package com.promptoven.purchaseservice.member.purchase.vo.in;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Builder
 @Getter
-@NoArgsConstructor
 public class PurchaseRequestVo {
 
-    private String memberUuid;
+    private final String memberUuid;
 
-    private List<String> productUuids;
+    private final List<String> productUuids;
 
-    private Long paymentId;
-
-    @Builder
-    public PurchaseRequestVo(String memberUuid, List<String> productUuids, Long paymentId) {
-        this.memberUuid = memberUuid;
-        this.productUuids = productUuids;
-        this.paymentId = paymentId;
-    }
+    private final Long paymentId;
 }
