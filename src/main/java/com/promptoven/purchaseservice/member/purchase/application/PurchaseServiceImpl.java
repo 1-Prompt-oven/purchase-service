@@ -11,6 +11,7 @@ import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseRep
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +21,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseProductRepository purchaseProductRepository;
     private final PurchaseRepositoryCustom purchaseRepositoryCustom;
 
+    @Transactional
     @Override
     public void createPurchase(PurchaseRequestDto purchaseRequestDto) {
 
@@ -28,6 +30,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchaseProductRepository.saveAll(purchaseRequestDto.toPurchaseProductEntities(purchase.getPurchaseUuid()));
     }
 
+    @Transactional
     @Override
     public void createCartPurchase(PurchaseCartRequestDto purchaseCartRequestDto) {
 
@@ -36,11 +39,13 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchaseProductRepository.saveAll(purchaseCartRequestDto.toPurchaseProductEntities(purchase.getPurchaseUuid()));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CursorPage<PurchaseResponseDto> getPurchaseList(String memberUuid, Long lastPurchaseId, Integer pageSize) {
         return purchaseRepositoryCustom.getPurchaseListWithPagination(memberUuid, lastPurchaseId, pageSize);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CursorPage<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid, Long lastProductId, Integer pageSize) {
         return purchaseRepositoryCustom.getPurchaseProductWithPagination(memberUuid, lastProductId, pageSize);
