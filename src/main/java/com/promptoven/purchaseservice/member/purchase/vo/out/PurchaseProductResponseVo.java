@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class PurchaseProductResponseVo {
 
-    private Long id;
+    private final Long id;
 
-    private String purchaseUuid;
+    private final String purchaseUuid;
 
-    private String productUuid;
+    private final String productUuid;
 
-    private String memberUuid;
+    private final String memberUuid;
 
-    private boolean writtenReview;
+    private final boolean writtenReview;
 }
