@@ -12,10 +12,6 @@ public interface PurchaseService {
 
     void createCartPurchase(PurchaseCartRequestDto purchaseCartRequestDto);
 
-    //    List<PurchaseResponseDto> getPurchaseList(String memberUuid);
-    //
-    //    List<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid);
-
     CursorPage<PurchaseResponseDto> getPurchaseList(String memberUuid, Long lastPurchaseId, Integer pageSize);
 
     CursorPage<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid, Long lastProductId, Integer pageSize);
