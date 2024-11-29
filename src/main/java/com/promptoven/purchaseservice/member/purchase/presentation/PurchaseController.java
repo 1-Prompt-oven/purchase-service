@@ -70,7 +70,7 @@ public class PurchaseController {
         );
     }
 
-    @Operation(summary = "주문 상품 목록 조회 (페이지네이션)", description = "주문 상품 목록 조회 (페이지네이션)")
+    @Operation(summary = "주문 상품 목록 전체 조회 (페이지네이션)", description = "주문 상품 목록 조회 (페이지네이션)")
     @GetMapping("/products")
     public BaseResponse<CursorPage<PurchaseProductResponseVo>> getPurchaseProduct(
             @RequestParam String memberUuid,
@@ -93,5 +93,4 @@ public class PurchaseController {
                 )
         );
     }
-
 }
