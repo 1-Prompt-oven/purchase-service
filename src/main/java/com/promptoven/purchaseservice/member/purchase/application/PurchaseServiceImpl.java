@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
@@ -49,5 +51,13 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public CursorPage<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid, Long lastProductId, Integer pageSize) {
         return purchaseRepositoryCustom.getPurchaseProductWithPagination(memberUuid, lastProductId, pageSize);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PurchaseProductResponseDto> getPurchaseProductByPurchaseUuid(String purchaseUuid) {
+        return purchaseProductRepository.findByPurchaseUuid(purchaseUuid).stream()
+                .map(PurchaseProductResponseDto::fromEntity)
+                .toList();
     }
 }

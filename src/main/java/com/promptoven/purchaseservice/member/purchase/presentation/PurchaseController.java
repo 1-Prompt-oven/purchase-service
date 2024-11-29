@@ -70,7 +70,7 @@ public class PurchaseController {
         );
     }
 
-    @Operation(summary = "주문 상품 목록 조회 (페이지네이션)", description = "주문 상품 목록 조회 (페이지네이션)")
+    @Operation(summary = "주문 상품 목록 전체 조회 (페이지네이션)", description = "주문 상품 목록 조회 (페이지네이션)")
     @GetMapping("/products")
     public BaseResponse<CursorPage<PurchaseProductResponseVo>> getPurchaseProduct(
             @RequestParam String memberUuid,
@@ -94,4 +94,14 @@ public class PurchaseController {
         );
     }
 
+    @Operation(summary = "주문 UUID를 통한 주문 상품 목록 조회", description = "주문 UUID를 통한 주문 상품 목록 조회")
+    @GetMapping("/products/{purchaseUuid}")
+    public BaseResponse<List<PurchaseProductResponseVo>> getPurchaseProductByPurchaseUuid(@PathVariable String purchaseUuid) {
+
+        List<PurchaseProductResponseDto> purchaseProductResponseDtos = purchaseService.getPurchaseProductByPurchaseUuid(purchaseUuid);
+
+        return new BaseResponse<>(purchaseProductResponseDtos.stream()
+                .map(PurchaseProductResponseDto::toVo)
+                .toList());
+    }
 }

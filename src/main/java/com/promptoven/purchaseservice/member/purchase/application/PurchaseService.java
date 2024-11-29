@@ -6,6 +6,8 @@ import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseProductResponseDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseResponseDto;
 
+import java.util.List;
+
 public interface PurchaseService {
 
     void createPurchase(PurchaseRequestDto purchaseRequestDto);
@@ -15,4 +17,6 @@ public interface PurchaseService {
     CursorPage<PurchaseResponseDto> getPurchaseList(String memberUuid, Long lastPurchaseId, Integer pageSize);
 
     CursorPage<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid, Long lastProductId, Integer pageSize);
+
+    List<PurchaseProductResponseDto> getPurchaseProductByPurchaseUuid(String purchaseUuid);
 }
