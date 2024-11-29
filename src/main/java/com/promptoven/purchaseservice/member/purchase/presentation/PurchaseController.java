@@ -94,6 +94,7 @@ public class PurchaseController {
         );
     }
 
+    // 하나의 주문에 대한 상품 조회
     @Operation(summary = "주문 UUID를 통한 주문 상품 목록 조회", description = "주문 UUID를 통한 주문 상품 목록 조회")
     @GetMapping("/products/{purchaseUuid}")
     public BaseResponse<List<PurchaseProductResponseVo>> getPurchaseProductByPurchaseUuid(@PathVariable String purchaseUuid) {
