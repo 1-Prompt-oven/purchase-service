@@ -19,4 +19,6 @@ public interface PurchaseService {
     CursorPage<PurchaseProductResponseDto> getPurchaseProduct(String memberUuid, Long lastProductId, Integer pageSize);
 
     List<PurchaseProductResponseDto> getPurchaseProductByPurchaseUuid(String purchaseUuid);
+
+    PurchaseResponseDto getPurchaseByPurchaseUuid(String purchaseUuid);
 }

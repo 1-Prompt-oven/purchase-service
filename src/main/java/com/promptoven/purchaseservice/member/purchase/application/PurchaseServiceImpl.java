@@ -60,4 +60,10 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .map(PurchaseProductResponseDto::fromEntity)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PurchaseResponseDto getPurchaseByPurchaseUuid(String purchaseUuid) {
+        return PurchaseResponseDto.fromEntity(purchaseRepository.findByPurchaseUuid(purchaseUuid).orElseThrow());
+    }
 }

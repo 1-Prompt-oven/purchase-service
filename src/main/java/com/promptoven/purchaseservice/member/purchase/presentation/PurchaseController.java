@@ -105,4 +105,11 @@ public class PurchaseController {
                 .map(PurchaseProductResponseDto::toVo)
                 .toList());
     }
+
+    @Operation(summary = "주문 상세 조회", description = "주문 상세 조회")
+    @GetMapping("/{purchaseUuid}")
+    public BaseResponse<PurchaseResponseVo> getPurchase(@PathVariable String purchaseUuid) {
+
+        return new BaseResponse<>(PurchaseResponseDto.toVo(purchaseService.getPurchaseByPurchaseUuid(purchaseUuid)));
+    }
 }
