@@ -112,4 +112,10 @@ public class PurchaseController {
 
         return new BaseResponse<>(PurchaseResponseDto.toVo(purchaseService.getPurchaseByPurchaseUuid(purchaseUuid)));
     }
+
+    @Operation(summary = "상품 구매 여부", description = "상품 구매 여부")
+    @GetMapping("/check")
+    public BaseResponse<Boolean> checkPurchase(@RequestParam String memberUuid, @RequestParam String productUuid) {
+        return new BaseResponse<>(purchaseService.checkPurchase(memberUuid, productUuid));
+    }
 }

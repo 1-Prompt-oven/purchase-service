@@ -66,4 +66,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     public PurchaseResponseDto getPurchaseByPurchaseUuid(String purchaseUuid) {
         return PurchaseResponseDto.fromEntity(purchaseRepository.findByPurchaseUuid(purchaseUuid).orElseThrow());
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean checkPurchase(String memberUuid, String productUuid) {
+        return purchaseProductRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid).isPresent();
+    }
 }

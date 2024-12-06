@@ -21,4 +21,6 @@ public interface PurchaseService {
     List<PurchaseProductResponseDto> getPurchaseProductByPurchaseUuid(String purchaseUuid);
 
     PurchaseResponseDto getPurchaseByPurchaseUuid(String purchaseUuid);
+
+    Boolean checkPurchase(String memberUuid, String productUuid);
 }
