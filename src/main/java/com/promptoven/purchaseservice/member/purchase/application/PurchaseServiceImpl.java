@@ -4,11 +4,14 @@ import com.promptoven.purchaseservice.common.domain.Purchase;
 import com.promptoven.purchaseservice.global.common.CursorPage;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseCartRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseRequestDto;
+import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseTempRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseProductResponseDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseResponseDto;
+import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseTempResponseDto;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseProductRepository;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseRepository;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseRepositoryCustom;
+import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseTempRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseProductRepository purchaseProductRepository;
     private final PurchaseRepositoryCustom purchaseRepositoryCustom;
+    private final PurchaseTempRepository purchaseTempRepository;
 
     @Transactional
     @Override
@@ -71,5 +75,21 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public Boolean checkPurchase(String memberUuid, String productUuid) {
         return purchaseProductRepository.findByMemberUuidAndProductUuid(memberUuid, productUuid).isPresent();
+    }
+
+    @Transactional
+    @Override
+    public void saveTempPurchaseProduct(List<PurchaseTempRequestDto> purchaseTempRequestDtos) {
+        purchaseTempRepository.saveAll(purchaseTempRequestDtos.stream()
+                .map(PurchaseTempRequestDto::toEntity)
+                .toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PurchaseTempResponseDto> getTempPurchaseProduct(String memberUuid) {
+        return purchaseTempRepository.findByMemberUuid(memberUuid).stream()
+                .map(PurchaseTempResponseDto::fromEntity)
+                .toList();
     }
 }

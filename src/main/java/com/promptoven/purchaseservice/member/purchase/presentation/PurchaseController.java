@@ -5,12 +5,16 @@ import com.promptoven.purchaseservice.global.common.response.BaseResponse;
 import com.promptoven.purchaseservice.member.purchase.application.PurchaseService;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseCartRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseRequestDto;
+import com.promptoven.purchaseservice.member.purchase.dto.in.PurchaseTempRequestDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseProductResponseDto;
 import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseResponseDto;
+import com.promptoven.purchaseservice.member.purchase.dto.out.PurchaseTempResponseDto;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseCartRequestVo;
 import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseRequestVo;
+import com.promptoven.purchaseservice.member.purchase.vo.in.PurchaseTempRequestVo;
 import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseProductResponseVo;
 import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseResponseVo;
+import com.promptoven.purchaseservice.member.purchase.vo.out.PurchaseTempResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -117,5 +121,28 @@ public class PurchaseController {
     @GetMapping("/check")
     public BaseResponse<Boolean> checkPurchase(@RequestParam String memberUuid, @RequestParam String productUuid) {
         return new BaseResponse<>(purchaseService.checkPurchase(memberUuid, productUuid));
+    }
+
+    @Operation(summary = "임시 주문 상품 저장", description = "임시 주문 상품 저장")
+    @PostMapping("/temp")
+    public BaseResponse<Void> saveTempPurchaseProduct(@RequestBody List<PurchaseTempRequestVo> requestVos) {
+
+        purchaseService.saveTempPurchaseProduct(requestVos.stream()
+                .map(PurchaseTempRequestDto::toDto)
+                .toList());
+
+        return new BaseResponse<>();
+    }
+
+    @Operation(summary = "임시 주문 상품 조회", description = "임시 주문 상품 조회")
+    @GetMapping("/temp")
+    public BaseResponse<List<PurchaseTempResponseVo>> getTempPurchaseProduct(@RequestParam String memberUuid) {
+
+        List<PurchaseTempResponseDto> purchaseTempResponseDtos = purchaseService.getTempPurchaseProduct(memberUuid);
+
+        return new BaseResponse<>(purchaseTempResponseDtos.stream()
+                .map(PurchaseTempResponseDto::toVo)
+                .toList());
+
     }
 }
