@@ -8,4 +8,6 @@ import java.util.List;
 public interface PurchaseTempRepository extends JpaRepository<PurchaseTemp, Long> {
 
     List<PurchaseTemp> findByMemberUuid(String memberUuid);
+
+    void deleteAllByMemberUuid(String memberUuid);
 }

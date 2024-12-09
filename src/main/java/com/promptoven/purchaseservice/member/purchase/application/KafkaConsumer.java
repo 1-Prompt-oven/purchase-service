@@ -5,6 +5,7 @@ import com.promptoven.purchaseservice.member.purchase.dto.in.RequestMessageDto;
 import com.promptoven.purchaseservice.member.purchase.dto.in.RequestReviewMessageDto;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseProductRepository;
 import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseRepository;
+import com.promptoven.purchaseservice.member.purchase.infrastructure.PurchaseTempRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -17,6 +18,7 @@ public class KafkaConsumer {
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseProductRepository purchaseProductRepository;
+    private final PurchaseTempRepository purchaseTempRepository;
 
     @KafkaListener(topics = "${payment-create-event}", groupId = "kafka-payment-purchase-service")
     public void consumeCreate(RequestMessageDto message) {
@@ -24,6 +26,8 @@ public class KafkaConsumer {
         log.info("consumeCreate: {}", message);
 
         Purchase purchase = purchaseRepository.save(message.toPurchaseEntity(message.getMemberUuid(), message.getPaymentId()));
+
+        purchaseTempRepository.deleteAllByMemberUuid(message.getMemberUuid());
 
         message.getProductUuids().forEach(purchaseProduct -> {
             purchaseProductRepository.save(RequestMessageDto.toPurchaseProductEntity(purchase.getPurchaseUuid(), purchaseProduct, purchase.getMemberUuid()));
