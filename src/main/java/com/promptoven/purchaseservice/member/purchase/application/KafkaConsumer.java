@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -21,6 +22,7 @@ public class KafkaConsumer {
     private final PurchaseTempRepository purchaseTempRepository;
 
     @KafkaListener(topics = "${payment-create-event}", groupId = "kafka-payment-purchase-service", containerFactory = "requestMessageKafkaListenerContainerFactory")
+    @Transactional
     public void consumeCreate(RequestMessageDto message) {
 
         log.info("consumeCreate: {}", message);
