@@ -20,7 +20,7 @@ public class KafkaConsumer {
     private final PurchaseProductRepository purchaseProductRepository;
     private final PurchaseTempRepository purchaseTempRepository;
 
-    @KafkaListener(topics = "${payment-create-event}", groupId = "kafka-payment-purchase-service")
+    @KafkaListener(topics = "${payment-create-event}", groupId = "kafka-payment-purchase-service", containerFactory = "requestMessageKafkaListenerContainerFactory")
     public void consumeCreate(RequestMessageDto message) {
 
         log.info("consumeCreate: {}", message);
@@ -34,7 +34,7 @@ public class KafkaConsumer {
         });
     }
 
-    @KafkaListener(topics = "${review-create-event}", groupId = "kafka-create-review-service")
+    @KafkaListener(topics = "${review-create-event}", groupId = "kafka-create-review-service", containerFactory = "requestReviewKafkaListenerContainerFactory")
     public void consumeReviewCreate(RequestReviewMessageDto message) {
         purchaseProductRepository.findByMemberUuidAndProductUuid(
                 message.getAuthorUuid(), message.getProductUuid()
