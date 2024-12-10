@@ -11,7 +11,13 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestReviewMessageDto {
 
-    private String authorUuid;
-
+    private Long reviewId;
     private String productUuid;
+    private String sellerUuid;
+    private String authorUuid;
+    private String authorProfileImage;
+    private String authorNickname;
+    private int star;
+    private String contents;
+    private Boolean isDeleted;
 }
